@@ -1,0 +1,70 @@
+0. Coding conventions - DONE
+1. Normalize regional data - Spain DONE Italy DONE
+2. Reorg file structure to make sense - DONE
+3. Centralize Util - DONE
+    a. Generic Diffs - DONE
+    b. Generic Column Normalization - DONE
+    c. Country data from regional data - DONE
+4. Centralize Graphing Functions
+    a. Regions by ID - DONE
+    b. Country data by dimension - DONE
+    c. Allow for adding lines - DROPPED - Need graphics contexts, but should replace graphing library first
+    d. PNG output if ! NA data - DONE
+        i. Fix titles - DONE
+4. Regoranize data/utils functions, remove common lines and constants from other ares - DONE enough
+5. How the fuck to people use R? Make this easier to interact with
+    - R script? library? help?
+6. Replace graphing library
+    - Went with ggplot because it's stupid easy, 100 lines went down to about 20 - DONE
+       https://community.rstudio.com/t/lattice-or-ggplot2/6240
+    - Add line colors back
+        # Box plot
+        bp + scale_fill_manual(breaks = c("2", "1", "0.5"), 
+                            values=c("red", "blue", "green"))
+        # Scatter plot
+        sp + scale_color_manual(breaks = c("8", "6", "4"),
+                                values=c("red", "blue", "green"))
+
+    - Fix chart titles
+    - World Data version - DONE
+7. Add trend lines - DONE
+9. Fucking colors, man - DONE http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+10. Output world data as PNG - DONE
+11. Chart titles, axis names, and legends - DONE
+
+1. Ohio Data - https://coronavirus.ohio.gov/wps/portal/gov/covid-19/dashboards
+2. Key dates - Lockdown dates per country
+3. Fucking growth rates
+4. Projection sets
+5. Graph data per continent (NA, EU, Asia, Africa, South America)
+6. Interactive graphs
+
+
+
+https://style.tidyverse.org/
+https://google.github.io/styleguide/Rguide.html
+
+Variable Names - lowercase with underscores, no camelCase
+Function Names - BigCamelCase, thanks Google!
+
+
+
+world_data <- ReadWorldData()
+
+world_data <- subset(world_data, cases > 100)
+world_data$ID <- sequence(rle(as.character(world_data$geoId))$lengths)
+
+str(world_data$geoId)
+
+countries <- c("CN", "ES", "IT", "PL", "UK", "US")
+#countries <- c("AT", "DK", "LU", "PL")
+#countries <- c("AT", "DK", "PL")
+
+world_data <- filter(world_data, geoId %in% countries)
+
+png("Output/world_cases.png")
+
+PlotDimensionForRegionSet(world_data, "ID", countries, "geoId", "cases", GEOID_COLOR_CODES))
+PlotDimensionForRegionSet(world_data, "ID", countries, "geoId", "deaths", GEOID_COLOR_CODES)
+#print(PlotDimensionForRegionSet(world_data, "ID", countries, "geoId", "deathsSum", GEOID_COLOR_CODES))
+#print(PlotDimensionForRegionSet(world_data, "ID", countries, "geoId", "casesSum", GEOID_COLOR_CODES))
